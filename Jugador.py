@@ -6,22 +6,27 @@ Created on Mon Sep 25 20:11:06 2017
 @author: terevaldivia
 """
 import os
-from CC3501Utils import *
+from CC3501Utils_personal import *
+from Plataforma import *
+from Reloj import *
+import numpy as np
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
-fps = 30
+fps = 60
 clock = pygame.time.Clock()
 
 class Jugador(Figura):
     vel_x = 0
     vel_y = 0
-    max_vel_caida = 20
+    max_vel_caida = -20
+    ac_salto = 50
+    ac_gravedad = 10
     
     aceleracion = 0.5
     max_vel_x = 8
     
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
-        super().__init__(pos, rgb)
+        super(Jugador, self).__init__(pos, rgb)
     
     def figura(self):
         #queremos hacer un pescado
@@ -70,6 +75,13 @@ class Jugador(Figura):
         
     def update(self):
         self.pos += Vector(self.vel_x, self.vel_y)
+        if self.vel_x > 0:
+            new_x = self.vel_x -self.aceleracion
+            self.vel_x = 0 if new_x < 0 else new_x
+        elif self.vel_x < 0:
+            new_x = self.vel_x +self.aceleracion
+            self.vel_x = 0 if new_x > 0 else new_x
+        
         pass
         
         
@@ -81,38 +93,47 @@ def main():
 
     p = Jugador(Vector(400, 300))
     
+    r = Reloj(Vector(200,200))
+    
+    
     run = True
+    
     while run:
-
+        pygame.event.pump()
+        
         for event in pygame.event.get():
-            if event.type == QUIT:  # cerrar ventana
+            if event.type == pygame.QUIT:  # cerrar ventana
                 run = False
 
-            if event.type == KEYDOWN:
-                if event.key == K_SPACE:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
                     pass
-
-                if event.key == K_RIGHT:
-                    p.vel_x += p.aceleracion
+                if event.key == pygame.K_w:
+                    p.pos += Vector(0, 20)
+                if event.key == pygame.K_RIGHT:
+                    p.vel_x += 10 * p.aceleracion
                     if p.vel_x == p.max_vel_x:
                         p.vel_x = p.max_vel_x
-                if event.key == K_LEFT:
-                    p.vel_x -= p.aceleracion
+                if event.key == pygame.K_LEFT:
+                    p.vel_x -= 10 * p.aceleracion
                     if p.vel_x == -p.max_vel_x:
                         p.vel_x = -p.max_vel_x
-                if event.key == K_UP:
-                    p.pos += Vector(0, 20)
-                if event.key == K_DOWN:
+                if event.key == pygame.K_UP:
+                    if p.vel_y == 0: p.vel_y += p.ac_salto
+                if event.key == pygame.K_DOWN:
                     p.pos -= Vector(0, 20)
-
+                    
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # limpiar buffers
 
         # dibujar figuras
+        
         p.update()
+        r.update(fps)
         p.dibujar()
+        r.dibujar()
+        print r.x_palito, r.y_palito, r.segundo
 
         pygame.display.flip()  # actualizar pantalla
-        #pygame.time.wait(int(1000 / 30))  # ajusta a 30 fps
         clock.tick(fps)
         
     pygame.quit()
