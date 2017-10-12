@@ -12,6 +12,7 @@ from CC3501Utils_personal import *
 
 
 class PlataformaLiana(Figura):
+    ancho = 200
     
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
         super(PlataformaLiana, self).__init__(pos, rgb)
@@ -20,30 +21,31 @@ class PlataformaLiana(Figura):
         #cuerpo
         glBegin(GL_QUADS)
         glColor3f(50 / 255.0, 205 / 255.0, 50 / 255.0) #Verde
-        glVertex2f(-100, 0)  
-        glVertex2f(-100, -25)  
-        glVertex2f(100, -25)
-        glVertex2f(100, 0)  
+        glVertex2f(-self.ancho/2, 0)  
+        glVertex2f(-self.ancho/2, -25)  
+        glVertex2f(self.ancho/2, -25)
+        glVertex2f(self.ancho/2, 0)  
         glEnd()
         #hoja izquierda
         glBegin(GL_QUADS)
         glColor3f(50 / 255.0, 205 / 255.0, 50 / 255.0)
-        glVertex2f(-100, -12)
-        glVertex2f(-115, 0)
-        glVertex2f(-130, -12)
-        glVertex2f(-115, -25)
+        glVertex2f(-self.ancho/2, -12)
+        glVertex2f(-(self.ancho/2+15), 0)
+        glVertex2f(-(self.ancho/2+30), -12)
+        glVertex2f(-(self.ancho/2+15), -25)
         glEnd()
         #hoja derecha
         glBegin(GL_QUADS)
         glColor3f(50 / 255.0, 205 / 255.0, 50 / 255.0)
-        glVertex2f(100, -12)
-        glVertex2f(115, 0)
-        glVertex2f(130, -12)
-        glVertex2f(115, -25)
+        glVertex2f(self.ancho/2, -12)
+        glVertex2f((self.ancho/2+15), 0)
+        glVertex2f((self.ancho/2+30), -12)
+        glVertex2f((self.ancho/2+15), -25)
         glEnd()
         
 class PlataformaPiedra(Figura):
     
+    ancho = 200
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
         super(PlataformaPiedra, self).__init__(pos, rgb)
     
@@ -51,17 +53,17 @@ class PlataformaPiedra(Figura):
         #cuerpo
         glBegin(GL_QUADS)
         glColor3f(220 / 255.0, 220 / 255.0, 220 / 255.0) #Gris
-        glVertex2f(-100, 0)  
-        glVertex2f(-80, -25)  
-        glVertex2f(80, -25)
+        glVertex2f(-self.ancho/2, 0)  
+        glVertex2f(-(self.ancho/2-20), -25)  
+        glVertex2f(self.ancho/2-20, -25)
         glVertex2f(100, 0)  
         glEnd()
         glBegin(GL_QUADS)
         glColor3f(105 / 255.0, 105 / 255.0, 105 / 255.0) #Gris
-        glVertex2f(-100, 0)  
-        glVertex2f(-90, -12.5)  
-        glVertex2f(90, -12.5)
-        glVertex2f(100, 0)  
+        glVertex2f(-self.ancho/2, 0)  
+        glVertex2f(-(self.ancho/2-10), -12.5)  
+        glVertex2f(self.ancho/2-10, -12.5)
+        glVertex2f(self.ancho/2, 0)  
         glEnd()
         glBegin(GL_QUADS)
         glColor3f(47 / 255.0, 79 / 255.0, 79 / 255.0) #Gris
@@ -85,7 +87,7 @@ class PlataformaPiedra(Figura):
         glEnd()
         
 class PlataformaMadera(Figura):
-    
+    ancho = 200
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
         super(PlataformaMadera, self).__init__(pos, rgb)
     
@@ -93,23 +95,23 @@ class PlataformaMadera(Figura):
         #cuerpo
         glBegin(GL_QUADS)
         glColor3f(165 / 255.0, 42 / 255.0, 42 / 255.0) #cafe
-        glVertex2f(-100, 0)  
-        glVertex2f(-100, -25)  
-        glVertex2f(100, -25)
-        glVertex2f(100, 0)  
+        glVertex2f(-self.ancho/2, 0)  
+        glVertex2f(-self.ancho/2, -25)  
+        glVertex2f(self.ancho/2, -25)
+        glVertex2f(self.ancho/2, 0)  
         glEnd()
         glBegin(GL_QUADS)
         glColor3f(160 / 255.0, 82 / 255.0, 45 / 255.0) 
-        glVertex2f(-100, -10)  
-        glVertex2f(-100, -20)  
-        glVertex2f(100, -20)
-        glVertex2f(100, -10)  
+        glVertex2f(-self.ancho/2, -10)  
+        glVertex2f(-self.ancho/2, -20)  
+        glVertex2f(self.ancho/2, -20)
+        glVertex2f(self.ancho/2, -10)  
         glEnd()
         glBegin(GL_QUADS)
         glColor3f(205 / 255.0, 133 / 255.0, 63 / 255.0) 
-        glVertex2f(-100, 0)  
-        glVertex2f(-100, -10)  
-        glVertex2f(100, -10)
-        glVertex2f(100, 0)  
+        glVertex2f(-self.ancho/2, 0)  
+        glVertex2f(-self.ancho/2, -10)  
+        glVertex2f(self.ancho/2, -10)
+        glVertex2f(self.ancho/2, 0)  
         glEnd()
         

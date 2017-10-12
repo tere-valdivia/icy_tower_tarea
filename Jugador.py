@@ -8,8 +8,7 @@ Created on Mon Sep 25 20:11:06 2017
 import os
 from CC3501Utils_personal import *
 from Plataforma import *
-from Reloj import *
-import numpy as np
+from Muros import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
 fps = 60
@@ -18,12 +17,11 @@ clock = pygame.time.Clock()
 class Jugador(Figura):
     vel_x = 0
     vel_y = 0
-    max_vel_caida = -20
-    ac_salto = 50
-    ac_gravedad = 10
     
-    aceleracion = 0.5
-    max_vel_x = 8
+    ac_y = 1 #gravedad
+    ac_x = 2
+    max_vel_y = -10
+    max_vel_x = 10
     
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
         super(Jugador, self).__init__(pos, rgb)
@@ -73,70 +71,51 @@ class Jugador(Figura):
         glEnd()
 
         
-    def update(self):
+    def update(self, platformList):
         self.pos += Vector(self.vel_x, self.vel_y)
+        self.ac_y = 1#reseteo fuera de la plataforma
+        self.vel_y -= self.ac_y
+        #control muros
+        if self.pos.x + 12 >= 760:
+            self.pos.x = 760 - 12
+            self.vel_x = -self.vel_x
+            
+        if self.pos.x - 12 <= 40:
+            self.pos.x = 40 + 12
+            self.vel_x = -self.vel_x
+        
+        #aceleracion en eje x
         if self.vel_x > 0:
-            new_x = self.vel_x -self.aceleracion
-            self.vel_x = 0 if new_x < 0 else new_x
+            self.vel_x -= self.ac_x
         elif self.vel_x < 0:
-            new_x = self.vel_x +self.aceleracion
-            self.vel_x = 0 if new_x > 0 else new_x
-        
-        pass
-        
-        
-
-def main():
-    ancho = 800
-    alto = 600
-    init(ancho, alto, "titulo")
-
-    p = Jugador(Vector(400, 300))
+            self.vel_x += self.ac_x
+            
+        #aceleracion en eje y
+        if self.vel_y <= self.max_vel_y:
+            self.vel_y = self.max_vel_y
+        if self.vel_y <= 0 and self.estaSobreAlgunaPlataforma(platformList):
+            self.vel_y = 0
+            self.ac_y = 0
     
-    r = Reloj(Vector(200,200))
-    
-    
-    run = True
-    
-    while run:
-        pygame.event.pump()
+        #fin de camara
+        if self.pos.y <= 70:
+            self.vel_y = 0
+            self.ac_y = 0
+        else: self.vel_y -= self.ac_y
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:  # cerrar ventana
-                run = False
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    pass
-                if event.key == pygame.K_w:
-                    p.pos += Vector(0, 20)
-                if event.key == pygame.K_RIGHT:
-                    p.vel_x += 10 * p.aceleracion
-                    if p.vel_x == p.max_vel_x:
-                        p.vel_x = p.max_vel_x
-                if event.key == pygame.K_LEFT:
-                    p.vel_x -= 10 * p.aceleracion
-                    if p.vel_x == -p.max_vel_x:
-                        p.vel_x = -p.max_vel_x
-                if event.key == pygame.K_UP:
-                    if p.vel_y == 0: p.vel_y += p.ac_salto
-                if event.key == pygame.K_DOWN:
-                    p.pos -= Vector(0, 20)
-                    
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # limpiar buffers
-
-        # dibujar figuras
         
-        p.update()
-        r.update(fps)
-        p.dibujar()
-        r.dibujar()
-        print r.x_palito, r.y_palito, r.segundo
-
-        pygame.display.flip()  # actualizar pantalla
-        clock.tick(fps)
+    
+    def estaSobrePlataforma(self, plataforma):
+        #plataforma es un objeto tipo Plataforma
+        sobre = (self.pos.y - 60 < plataforma.pos.y) and (self.pos.y - 60 > plataforma.pos.y - 20)
+        izq = self.pos.x >= plataforma.pos.x - plataforma.ancho/2
+        der = self.pos.x <= plataforma.pos.x + plataforma.ancho/2
+        return sobre and izq and der
+    
+    def estaSobreAlgunaPlataforma(self, platformList):
+        for plataforma in platformList:
+            if self.estaSobrePlataforma(plataforma): return True
+        return False
+    
         
-    pygame.quit()
-
-
-main()
+    

@@ -8,7 +8,8 @@ Created on Fri Oct  6 10:04:49 2017
 
 import os
 from CC3501Utils_personal import *
-import numpy as np
+
+pi = 3.1415
 
 class Reloj(Figura):
     #variables de instancia del palito
@@ -16,6 +17,7 @@ class Reloj(Figura):
     segundo = 0.
     x_palito = 0
     y_palito = tamano #posiciones iniciales
+    seg_final = 30
     
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
         super(Reloj, self).__init__(pos, rgb)
@@ -37,7 +39,7 @@ class Reloj(Figura):
         
         #Circulo interior
         glBegin(GL_TRIANGLE_FAN)
-        glColor3f(255 / 255.0, 248 / 255.0, 220 / 255.0)  
+        glColor3f(255 / 255.0, 248 / 255.0, 220 / 255.0)  #piel
         glVertex2f(0.0, 0.0)
 
         radio2 = 24
@@ -58,5 +60,7 @@ class Reloj(Figura):
 
     def update(self, fps):
         self.segundo += 1./fps
-        self.x_palito = self.tamano * np.sin(np.pi * self.segundo / 30.)
-        self.y_palito = self.tamano * np.cos(np.pi * self.segundo / 30.)
+        if self.segundo >= self.seg_final:
+            return
+        self.x_palito = self.tamano * sin(pi * self.segundo / 30.)
+        self.y_palito = self.tamano * cos(pi * self.segundo / 30.)
