@@ -10,6 +10,8 @@ import os
 from CC3501Utils_personal import *
 
 pi = 3.1415
+fps = 60
+clock = pygame.time.Clock()
 
 class Reloj(Figura):
     #variables de instancia del palito

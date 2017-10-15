@@ -11,15 +11,13 @@ from Plataforma import *
 from Muros import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'  # centrar pantalla
-fps = 60
-clock = pygame.time.Clock()
 
 class Jugador(Figura):
     vel_x = 0
     vel_y = 0
     
     ac_y = 1 #gravedad
-    ac_x = 2
+    ac_x = 0.5
     max_vel_y = -10
     max_vel_x = 10
     
@@ -71,8 +69,9 @@ class Jugador(Figura):
         glEnd()
 
         
-    def update(self, platformList):
-        self.pos += Vector(self.vel_x, self.vel_y)
+        
+    def update(self, platformList, camara):
+        self.pos += Vector(self.vel_x, self.vel_y - camara.y)
         self.ac_y = 1#reseteo fuera de la plataforma
         self.vel_y -= self.ac_y
         #control muros
@@ -98,10 +97,13 @@ class Jugador(Figura):
             self.ac_y = 0
     
         #fin de camara
-        if self.pos.y <= 70:
+#        if self.pos.y <= 70:
+#            self.vel_y = 0
+#            self.ac_y = 0
+        else: self.vel_y -= self.ac_y
+        if self.fueraDePantalla(camara):
             self.vel_y = 0
             self.ac_y = 0
-        else: self.vel_y -= self.ac_y
         
         
     
@@ -116,6 +118,12 @@ class Jugador(Figura):
         for plataforma in platformList:
             if self.estaSobrePlataforma(plataforma): return True
         return False
+    
+    def fueraDePantalla(self, camara):
+        return (self.pos.y - camara.y + 70) <=70
+    
+    def is_jumping(self):
+        return self.vel_y>0 or self.vel_y<0
     
         
     

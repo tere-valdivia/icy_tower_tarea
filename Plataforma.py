@@ -10,7 +10,6 @@ import os
 from CC3501Utils_personal import *
 
 
-
 class PlataformaLiana(Figura):
     ancho = 200
     
@@ -42,6 +41,11 @@ class PlataformaLiana(Figura):
         glVertex2f((self.ancho/2+30), -12)
         glVertex2f((self.ancho/2+15), -25)
         glEnd()
+        
+    def update(self, camara):
+        self.pos.y -= camara.y
+        pass
+        
         
 class PlataformaPiedra(Figura):
     
@@ -86,6 +90,10 @@ class PlataformaPiedra(Figura):
         glVertex2f(50, 0)  
         glEnd()
         
+    def update(self, camara):
+        self.pos.y -= camara.y
+        pass
+        
 class PlataformaMadera(Figura):
     ancho = 200
     def __init__(self, pos=Vector(0, 0), rgb=(1.0, 1.0, 1.0)):
@@ -114,4 +122,7 @@ class PlataformaMadera(Figura):
         glVertex2f(self.ancho/2, -10)
         glVertex2f(self.ancho/2, 0)  
         glEnd()
-        
+    
+    def update(self, camara):
+        self.pos.y -= camara.y
+        pass
