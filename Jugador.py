@@ -96,11 +96,9 @@ class Jugador(Figura):
             self.vel_y = 0
             self.ac_y = 0
     
-        #fin de camara
-#        if self.pos.y <= 70:
-#            self.vel_y = 0
-#            self.ac_y = 0
         else: self.vel_y -= self.ac_y
+        
+        #fin de camara
         if self.fueraDePantalla(camara):
             self.vel_y = 0
             self.ac_y = 0

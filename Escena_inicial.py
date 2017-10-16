@@ -15,6 +15,8 @@ from Plataforma import *
 from Reloj import *
 from Muros import *
 from Jugador import *
+from Fondo import *
+from Camara import *
 
 def main():
     ancho = 800
@@ -23,6 +25,8 @@ def main():
 
     p = Jugador(Vector(180 + 12, 50 + 70))
     r = Reloj(Vector(50,450))
+    fondo = Fondo(Vector(0,0))
+    camara = Camara(p)
     piedra = PlataformaPiedra(Vector(200, 50))
     liana = PlataformaLiana(Vector(400, 150))  
     madera = PlataformaMadera(Vector(650, 250))
@@ -30,7 +34,7 @@ def main():
     piedra2 = PlataformaPiedra(Vector(200, 500))
     muro = Muros(Vector(0,0))
     
-    elementos = [piedra, liana, madera, liana2, piedra2, muro, p, r]
+    elementos = [fondo, piedra, liana, madera, liana2, piedra2, muro, p, r]
     plataformas = [piedra, liana, madera, liana2, piedra2]
     run = True
     
@@ -57,7 +61,7 @@ def main():
 
         # dibujar figuras
         
-        p.update(plataformas)
+        p.update(plataformas, camara)
         r.update(fps)
         for elem in elementos:
             elem.dibujar()

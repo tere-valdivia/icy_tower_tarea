@@ -27,7 +27,7 @@ class Reloj(Figura):
         
         #Base circular
         glBegin(GL_TRIANGLE_FAN)
-        glColor3f(66 / 255.0, 226 / 255.0, 244 / 255.0)  # celeste
+        glColor3f(47 / 255.0, 79 / 255.0, 79 / 255.0)
         glVertex2f(0.0, 0.0)
 
         radio1 = 30
@@ -41,7 +41,7 @@ class Reloj(Figura):
         
         #Circulo interior
         glBegin(GL_TRIANGLE_FAN)
-        glColor3f(255 / 255.0, 248 / 255.0, 220 / 255.0)  #piel
+        glColor3f(97 / 255.0, 218 / 255.0, 137 / 255.0) 
         glVertex2f(0.0, 0.0)
 
         radio2 = 24

@@ -20,6 +20,7 @@ from Jugador import *
 from Fondo import *
 from Camara import *
 
+
 def main():
     ancho = 800
     alto = 600
@@ -33,18 +34,13 @@ def main():
     
     p_controller = ControladorPlataforma()
     plataformas = p_controller.lista
-#    
-#    piedra = PlataformaPiedra(Vector(200, 50))
-#    liana = PlataformaLiana(Vector(400, 150))  
-#    madera = PlataformaMadera(Vector(650, 250))
-#    liana2 = PlataformaLiana(Vector(500, 400))
-#    piedra2 = PlataformaPiedra(Vector(200, 500))
-    
     elementos = deepcopy(plataformas)
     elementos.extend([muro, p, r])
 #    elementos = [piedra, liana, madera, liana2, piedra2, muro, p, r]
 #    plataformas = [piedra, liana, madera, liana2, piedra2]
     run = True
+    game_state = "Play"
+    #el otro game state es "lost"
     
     while run:
         pygame.event.pump()
@@ -64,37 +60,35 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # cerrar ventana
                 run = False
-
-            
-#            if event.type == pygame.KEYDOWN:
-#                if event.key == pygame.K_SPACE:
-#                    p.vel_y += 30
-#                if event.key == pygame.K_RIGHT:
-#                    p.vel_x += 20
-#                    if p.vel_x > p.max_vel_x:
-#                        p.vel_x = p.max_vel_x
-#                if event.key == pygame.K_LEFT:
-#                    p.vel_x = -20
-#                    if p.vel_x < -p.max_vel_x:
-#                        p.vel_x = -p.max_vel_x
-#         
+        
             
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)  # limpiar buffers
 
-        # dibujar figuras
-        
         p.update(plataformas, camara)
         r.update(fps)
         
         for plataforma in plataformas:
             plataforma.update(camara)
+            
+        # dibujar figuras        
         fondo.dibujar()
-        for plataforma in plataformas:
-            plataforma.dibujar()
-        muro.dibujar()
-        p.dibujar()
-        r.dibujar()
-        camara.update()
+        
+        if (game_state == "Play"):
+            if (p.pos.y < 0 or r.segundo>r.seg_final):
+                game_state = "Game Over"
+            for plataforma in plataformas:
+                plataforma.dibujar()
+            muro.dibujar()
+            p.dibujar()
+            r.dibujar()
+            camara.update()
+        else:
+            if keys[K_p]:
+                p.pos = Vector(180 + 12, 50 + 70)
+                r = Reloj(Vector(50,450))
+                p_controller = ControladorPlataforma()
+                plataformas = p_controller.lista
+                game_state = "Play"
 
         pygame.display.flip()  # actualizar pantalla
         clock.tick(fps)
